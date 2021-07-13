@@ -23,11 +23,10 @@ string take_file(){
 
     return s;
 }
-
 Node * parsing()
 {
     string str = take_file();
-    Node *tmpnode = new Node;
+    Node *tmpnode;
     Node *root = new Node; // the root of the tree
     stack<Node*>st;//stack to know who will be the current parent tag
     int i=0;
@@ -38,9 +37,9 @@ Node * parsing()
         c=str[i++];
         if(c == '<' && str[i]!='/'){ //
             c=str[i++];
-            string name = "";
+            string name;
 
-            while(c != ' ' && c!='>'){ // parsing the name of the tag
+            while(c != ' ' && c!='>' && c!='/'){ // parsing the name of the tag
                 name+=c;
                 c=str[i++];
             }
@@ -48,15 +47,19 @@ Node * parsing()
             tmpnode->name = name;
 
             while(c!='>'){ // taking the tag's attributes
+                if(c=='/'){
+                    c=str[i++];
+                    break;
+                }
                 c=str[i++];
                 if(c==' ')c=str[i++];
-                string attr_name = "";
+                string attr_name;
                 while(c!='='){
                     attr_name+=c;
                     c=str[i++];
                 }
 
-                string attr_val = "";
+                string attr_val;
                 c=str[i++];
                 c=str[i++];
                 while(c!='"')
@@ -78,6 +81,9 @@ Node * parsing()
                 st.push(tmpnode);
             }
 
+            if(str[i-2]=='/')st.pop(); // special case of opening and closing tag in the same line
+
+
         }
 
         else if(c=='<'&&str[i]=='/'){ //
@@ -87,7 +93,7 @@ Node * parsing()
 
 
         else{ // taking the tag's text
-            string txt="";
+            string txt;
             while(c!='<'){
                 txt+=c;
                 c=str[i++];
@@ -102,6 +108,7 @@ Node * parsing()
 
 
 }
+
 
 void show_all_node(Node *tmpnode, int presize=0)
 {
