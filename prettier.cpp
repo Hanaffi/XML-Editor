@@ -139,8 +139,29 @@ void prettify(Node *tmpnode, int presize=0)
 }
 
 
+
+void minify (Node *tmpnode){
+	cout<< "<"<<tmpnode->name;
+	for(auto attr:tmpnode->attrs)
+	{
+		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+	}
+	cout<<">";
+	if(tmpnode->text.size())
+	{
+		cout<< tmpnode->text;
+	}
+	for(auto x:tmpnode->children)
+	{
+		minify(x);
+	}
+	cout<<"</" <<tmpnode->name<< ">";
+}
+
+
 int main() {
     Node* r = parsing();
     prettify(r,0);
+    minify(r);
     return 0;
 }
