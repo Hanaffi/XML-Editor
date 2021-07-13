@@ -2,16 +2,19 @@
 using namespace std;
 
 class Node{
-	public:
-	string text;//tagValue
-	string name;//tagName
-	vector<Node*> children;
-	vector<pair<string,string>>attrs; // (name,value)
+public:
+    string text;//tagValue
+    string name;//tagName
+    vector<Node*> children;
+    vector<pair<string,string>>attrs; // (name,value)
 
 };
 
+
+
+
 string take_file(){
-    freopen("","r",stdin); // put the file path between " "
+    freopen("C:\\Users\\DELL\\CLionProjects\\testingggggg\\test2.txt","r",stdin); // put the file path between " "
 
     string s="";
 
@@ -23,6 +26,7 @@ string take_file(){
 
     return s;
 }
+
 Node * parsing()
 {
     string str = take_file();
@@ -31,11 +35,20 @@ Node * parsing()
     stack<Node*>st;//stack to know who will be the current parent tag
     int i=0;
 
-    while (i<str.length()-1){ //iterating on all the characters of the file
+    while (true){ //iterating on all the characters of the file
         char c;
         tmpnode = new Node;
         c=str[i++];
-        if(c == '<' && str[i]!='/'){ //
+
+        if(c=='<' && str[i]=='?'){ //it may be the XML prolog
+            while(c!='>')c=str[i++];
+        }
+
+        else if(c=='<' && str[i]=='!'){ //it is a comment
+            while(c!='>')c=str[i++];
+        }
+
+        else if(c == '<' && str[i]!='/'){ // it's an opening tag
             c=str[i++];
             string name;
 
@@ -86,9 +99,10 @@ Node * parsing()
 
         }
 
-        else if(c=='<'&&str[i]=='/'){ //
+        else if(c=='<'&&str[i]=='/'){ // it is a closing tag
             st.pop();
             while(c!='>')c=str[i++];
+            if(st.empty())break;
         }
 
 
@@ -109,53 +123,50 @@ Node * parsing()
 
 }
 
-
 void prettify(Node *tmpnode, int presize=0)
 {
-	for(int i=0;i<presize;i++)
-		cout<<"\t";
-	cout<< "<"<<tmpnode->name;
-	for(auto attr:tmpnode->attrs)
-	{
-		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
-	}
+    for(int i=0;i<presize;i++)
+        cout<<"\t";
+    cout<< "<"<<tmpnode->name;
+    for(auto attr:tmpnode->attrs)
+    {
+        cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+    }
 
-	cout<<">"<<endl;
+    cout<<">"<<endl;
 
-	if(tmpnode->text.size())
-	{
-		for(int i=0;i<presize+1;i++)
-			cout<<"\t";
-		cout<< tmpnode->text<<" "<<endl;
-	
-	}
-	for(auto x:tmpnode->children)
-	{
-		show_all_node(x, presize+1);
-	}
-	for(int i=0;i<presize;i++)
-		cout<<"\t";
-	cout<<"</" <<tmpnode->name<< ">" << endl;
+    if(tmpnode->text.size())
+    {
+        for(int i=0;i<presize+1;i++)
+            cout<<"\t";
+        cout<< tmpnode->text<<" "<<endl;
+
+    }
+    for(auto x:tmpnode->children)
+    {
+        prettify(x, presize+1);
+    }
+    for(int i=0;i<presize;i++)
+        cout<<"\t";
+    cout<<"</" <<tmpnode->name<< ">" << endl;
 }
 
-
-
 void minify (Node *tmpnode){
-	cout<< "<"<<tmpnode->name;
-	for(auto attr:tmpnode->attrs)
-	{
-		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
-	}
-	cout<<">";
-	if(tmpnode->text.size())
-	{
-		cout<< tmpnode->text;
-	}
-	for(auto x:tmpnode->children)
-	{
-		minify(x);
-	}
-	cout<<"</" <<tmpnode->name<< ">";
+    cout<< "<"<<tmpnode->name;
+    for(auto attr:tmpnode->attrs)
+    {
+        cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+    }
+    cout<<">";
+    if(tmpnode->text.size())
+    {
+        cout<< tmpnode->text;
+    }
+    for(auto x:tmpnode->children)
+    {
+        minify(x);
+    }
+    cout<<"</" <<tmpnode->name<< ">";
 }
 
 
