@@ -110,38 +110,37 @@ Node * parsing()
 }
 
 
-void show_all_node(Node *tmpnode, int presize=0)
+void prettify(Node *tmpnode, int presize=0)
 {
+	for(int i=0;i<presize;i++)
+		cout<<"\t";
+	cout<< "<"<<tmpnode->name;
+	for(auto attr:tmpnode->attrs)
+	{
+		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+	}
 
-    /******************Get the node name and node attributes*********************/
-    cout<< setw(presize)<< "<"<<tmpnode->name << " ";
-    for(auto attr:tmpnode->attrs)
-    {
-        cout<< attr.first << "=\""<< attr.second << "\"" << " ";
-    }
+	cout<<">"<<endl;
 
-    cout<<">"<<endl;
-
-    /******************Get node information Text*********************/
-    if(tmpnode->text.size())//Be sure to judge otherwise there will be problems. If the text is empty, it will print text= and terminate the process directly
-        cout<< setw(presize+4) << tmpnode->text<<" "<<endl;
-    for(auto x:tmpnode->children)
-    {
-        show_all_node(x, presize+4);//Recursively use, print all attributes and text information of child nodes
-    }
-
-    /******************Node closure information and transfer node *********************/
-    cout<< setw(presize) <<"</" <<tmpnode->name<< ">" << endl;
-
+	if(tmpnode->text.size())
+	{
+		for(int i=0;i<presize+1;i++)
+			cout<<"\t";
+		cout<< tmpnode->text<<" "<<endl;
+	
+	}
+	for(auto x:tmpnode->children)
+	{
+		show_all_node(x, presize+1);
+	}
+	for(int i=0;i<presize;i++)
+		cout<<"\t";
+	cout<<"</" <<tmpnode->name<< ">" << endl;
 }
 
 
 int main() {
-
-
     Node* r = parsing();
-
-    show_all_node(r,0);
-	
-	return 0;
+    prettify(r,0);
+    return 0;
 }
