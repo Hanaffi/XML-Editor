@@ -2,11 +2,11 @@
 using namespace std;
 
 class Node{
-	public:
-	string text;//tagValue
-	string name;//tagName
-	vector<Node*> children;
-	vector<pair<string,string>>attrs; // (name,value)
+public:
+    string text;//tagValue
+    string name;//tagName
+    vector<Node*> children;
+    vector<pair<string,string>>attrs; // (name,value)
 
 };
 
@@ -31,7 +31,7 @@ Node * parsing()
     stack<Node*>st;//stack to know who will be the current parent tag
     int i=0;
 
-    while (i<str.length()-1){ //iterating on all the characters of the file
+    while (true){ //iterating on all the characters of the file
         char c;
         tmpnode = new Node;
         c=str[i++];
@@ -89,6 +89,7 @@ Node * parsing()
         else if(c=='<'&&str[i]=='/'){ //
             st.pop();
             while(c!='>')c=str[i++];
+            if(st.empty())break;
         }
 
 
@@ -112,50 +113,49 @@ Node * parsing()
 
 void prettify(Node *tmpnode, int presize=0)
 {
-	for(int i=0;i<presize;i++)
-		cout<<"\t";
-	cout<< "<"<<tmpnode->name;
-	for(auto attr:tmpnode->attrs)
-	{
-		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
-	}
+    for(int i=0;i<presize;i++)
+        cout<<"\t";
+    cout<< "<"<<tmpnode->name;
+    for(auto attr:tmpnode->attrs)
+    {
+        cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+    }
 
-	cout<<">"<<endl;
+    cout<<">"<<endl;
 
-	if(tmpnode->text.size())
-	{
-		for(int i=0;i<presize+1;i++)
-			cout<<"\t";
-		cout<< tmpnode->text<<" "<<endl;
-	
-	}
-	for(auto x:tmpnode->children)
-	{
-		prettify(x, presize+1);
-	}
-	for(int i=0;i<presize;i++)
-		cout<<"\t";
-	cout<<"</" <<tmpnode->name<< ">" << endl;
+    if(tmpnode->text.size())
+    {
+        for(int i=0;i<presize+1;i++)
+            cout<<"\t";
+        cout<< tmpnode->text<<" "<<endl;
+
+    }
+    for(auto x:tmpnode->children)
+    {
+        prettify(x, presize+1);
+    }
+    for(int i=0;i<presize;i++)
+        cout<<"\t";
+    cout<<"</" <<tmpnode->name<< ">" << endl;
 }
 
 
-
 void minify (Node *tmpnode){
-	cout<< "<"<<tmpnode->name;
-	for(auto attr:tmpnode->attrs)
-	{
-		cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
-	}
-	cout<<">";
-	if(tmpnode->text.size())
-	{
-		cout<< tmpnode->text;
-	}
-	for(auto x:tmpnode->children)
-	{
-		minify(x);
-	}
-	cout<<"</" <<tmpnode->name<< ">";
+    cout<< "<"<<tmpnode->name;
+    for(auto attr:tmpnode->attrs)
+    {
+        cout<<" "<< attr.first << "=\""<< attr.second << "\"" ;
+    }
+    cout<<">";
+    if(tmpnode->text.size())
+    {
+        cout<< tmpnode->text;
+    }
+    for(auto x:tmpnode->children)
+    {
+        minify(x);
+    }
+    cout<<"</" <<tmpnode->name<< ">";
 }
 
 
