@@ -10,7 +10,7 @@
 		data = 0;
 		frequency = 0;
 	}
-	node_comp::node_comp(unsigned char d,unsigned f,node_comp *l,node_comp *r)
+	node_comp::node_comp(unsigned char d,unsigned int f,node_comp *l,node_comp *r)
 	{
 		left = l;
 		right = r;
@@ -29,7 +29,7 @@
 	{
 		data = d;
 	}
-	void node_comp::set_frequency(unsigned f)
+	void node_comp::set_frequency(unsigned int f)
 	{
 		frequency = f;
 	}
@@ -37,7 +37,7 @@
 	{
 		return data;
 	}
-	unsigned node_comp::get_frquency() const
+	unsigned int node_comp::get_frquency() const
 	{
 		return frequency;
 	}
