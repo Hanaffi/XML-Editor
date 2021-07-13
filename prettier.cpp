@@ -131,7 +131,7 @@ void prettify(Node *tmpnode, int presize=0)
 	}
 	for(auto x:tmpnode->children)
 	{
-		show_all_node(x, presize+1);
+		prettify(x, presize+1);
 	}
 	for(int i=0;i<presize;i++)
 		cout<<"\t";
