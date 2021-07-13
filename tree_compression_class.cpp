@@ -1,4 +1,4 @@
-#include "tree_compression_class"
+#include "tree_compression_class.h"
 #include<iostream>
 #include<string>
 
