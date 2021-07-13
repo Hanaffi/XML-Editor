@@ -10,8 +10,11 @@ public:
 
 };
 
+
+
+
 string take_file(){
-    freopen("","r",stdin); // put the file path between " "
+    freopen("C:\\Users\\DELL\\CLionProjects\\testingggggg\\test2.txt","r",stdin); // put the file path between " "
 
     string s="";
 
@@ -23,6 +26,7 @@ string take_file(){
 
     return s;
 }
+
 Node * parsing()
 {
     string str = take_file();
@@ -35,7 +39,16 @@ Node * parsing()
         char c;
         tmpnode = new Node;
         c=str[i++];
-        if(c == '<' && str[i]!='/'){ //
+
+        if(c=='<' && str[i]=='?'){ //it may be the XML prolog
+            while(c!='>')c=str[i++];
+        }
+
+        else if(c=='<' && str[i]=='!'){ //it is a comment
+            while(c!='>')c=str[i++];
+        }
+
+        else if(c == '<' && str[i]!='/'){ // it's an opening tag
             c=str[i++];
             string name;
 
@@ -86,7 +99,7 @@ Node * parsing()
 
         }
 
-        else if(c=='<'&&str[i]=='/'){ //
+        else if(c=='<'&&str[i]=='/'){ // it is a closing tag
             st.pop();
             while(c!='>')c=str[i++];
             if(st.empty())break;
@@ -109,7 +122,6 @@ Node * parsing()
 
 
 }
-
 
 void prettify(Node *tmpnode, int presize=0)
 {
@@ -138,7 +150,6 @@ void prettify(Node *tmpnode, int presize=0)
         cout<<"\t";
     cout<<"</" <<tmpnode->name<< ">" << endl;
 }
-
 
 void minify (Node *tmpnode){
     cout<< "<"<<tmpnode->name;
