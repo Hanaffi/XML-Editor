@@ -33,7 +33,7 @@ void xml2json(Node *tmpnode, int presize)
 		// text exist along with attr
 		if(tmpnode->text.size())
 		{
-			cout << "\n" << setw(presize+11) << "\"#text\": " << tmpnode->text << "\"\n";
+			cout << "\n" << setw(presize+11) << "\"#text\": " << tmpnode->text << "\"";
 		}
 	}
 
@@ -41,11 +41,20 @@ void xml2json(Node *tmpnode, int presize)
 	else if(tmpnode->text.size())
 		cout << "\"" << tmpnode->text << "\"";
 
+	int i = 0;
 	for(auto x:tmpnode->children)
+	{
+		xml2json(x, presize+3);
+		if((x->attrs.size()) > 0 || (x->children.size() > 1))
 		{
-			xml2json(x, presize+3);
+			cout << "\n" << setw(presize+4) << "}";
+			
+			Node* cc = tmpnode->children[i];
+			Node* nc = tmpnode->children[++i];
+			if(cc->level > nc->level)
+				cout << ",";
 		}
-	
+	}
 };
 
 int main ()
