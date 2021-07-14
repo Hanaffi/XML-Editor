@@ -7,7 +7,7 @@ public:
     string name;//tagName
     vector<Node*> children;
     vector<pair<string,string>>attrs; // (name,value)
-
+    int level;
 };
 
 
@@ -31,9 +31,10 @@ Node * parsing()
 {
     string str = take_file();
     Node *tmpnode;
-    Node *root = new Node; // the root of the tree
+    Node *root = new Node; // the root of the tree,,,,,,,,,,,,,,,,,,, 
     stack<Node*>st;//stack to know who will be the current parent tag
     int i=0;
+    int lvlnumb = 0;
 
     while (true){ //iterating on all the characters of the file
         char c;
@@ -88,18 +89,25 @@ Node * parsing()
             if(st.empty()){ // the root will be the first parent to enter the stack
                 root = tmpnode;
                 st.push(root);
+                st.top()->level = 0;
             }
             else{
                 st.top()->children.push_back(tmpnode);
+                tmpnode->level = ++lvlnumb;
                 st.push(tmpnode);
             }
 
-            if(str[i-2]=='/')st.pop(); // special case of opening and closing tag in the same line
+            if(str[i-2]=='/')
+            {
+                lvlnumb--;
+                st.pop(); // special case of opening and closing tag in the same line
+            }
 
 
         }
 
         else if(c=='<'&&str[i]=='/'){ // it is a closing tag
+            lvlnumb--;
             st.pop();
             while(c!='>')c=str[i++];
             if(st.empty())break;
