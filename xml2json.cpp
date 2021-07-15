@@ -48,11 +48,6 @@ void xml2json(Node *tmpnode, int presize)
 		if((x->attrs.size()) > 0 || (x->children.size() > 1))
 		{
 			cout << "\n" << setw(presize+4) << "}";
-			
-			Node* cc = tmpnode->children[i];
-			Node* nc = tmpnode->children[++i];
-			if(cc->level > nc->level)
-				cout << ",";
 		}
 	}
 };
