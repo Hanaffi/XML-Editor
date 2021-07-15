@@ -2,6 +2,7 @@
 #define _TREE_COMPRESSION_CLASS_H
 #include <iostream>
 
+
 class node_comp
 {
 private:
@@ -36,6 +37,9 @@ public:
 	node_comp *get_root();
 	~tree();
 };
-
+void heapify(vector<node_comp*> &V, int i, int length);
+node_comp* get_min_heap(vector<node_comp*> &v);
+void Insert_Heap(vector<node_comp*> &v, node_comp* e);
+void build_min_heap(vector<node_comp*> &v, int length);
 
 #endif

@@ -1,7 +1,10 @@
 #include "tree_compression_class.h"
 #include<iostream>
 #include<string>
+#include<vector>
+#include<algorithm>
 
+	using namespace std;
 
 	node_comp::node_comp()
 	{
@@ -97,3 +100,54 @@
 		root->get_right()->kill_children();
 		delete root;
 	}
+
+
+// implementing functions for dealing with min heap to store our tree in array with min freq node at location 0
+
+//Heapify function
+void heapify(vector<node_comp*> &V, int i, int length)
+{
+	int smallest = i;
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
+	if (left <= length && V[left]->frequency < V[smallest]->frequency)
+		smallest = left;
+	if (right<= length && V[right]->frequency < V[smallest]->frequency)
+		smallest = right;
+	if (smallest != i)
+	{
+		swap(V[i], V[smallest]);
+		heapify(V, smallest, length);
+	}
+}
+//getting the min. element in our heap then heapify again
+node_comp* get_min_heap(vector<node_comp*> &v)
+{
+	if (v.size() >= 1) {
+		node_comp* minimum = v[0];
+		v[0] = v.back();
+		v.pop_back();
+		heapify(v, 0, v.size() - 1);
+		return minimum;
+	}
+	return NULL;
+}
+//inserting element in our heap 
+void Insert_Heap(vector<node_comp*> &v, node_comp* e)
+{
+	v.push_back(e);
+	int i = v.size() - 1;
+	int parent = (i - 1) / 2;
+	while (i > 0 && v[parent]->frequency > v[i]->frequency)
+	{
+		swap(v[i], v[parent]);
+		i = parent;
+	}
+}
+void build_min_heap(vector<node_comp*> &v, int length)
+{
+	for (int i = (length - 1) / 2; i >= 0; i--)
+	{
+		heapify(v, i, length);
+	}
+}
