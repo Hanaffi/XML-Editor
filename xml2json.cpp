@@ -52,6 +52,12 @@ void xml2json(Node *tmpnode, int presize)
 	}
 };
 
+
+void xml2json_wrapper(Node *tmpnode, int presize)
+{
+	xml2json(tmpnode, presize);
+	cout<<endl<<"}";
+}
 int main ()
 {
     // test for xml2json
@@ -97,9 +103,7 @@ int main ()
 	c2->children.push_back(c5);
 
 	cout << endl;
-	xml2json(root,0);
-	cout << endl;
-
-    return 0;
+	xml2json_wrapper(root,0);
+	return 0;
 
 }
