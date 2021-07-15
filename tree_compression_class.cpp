@@ -110,9 +110,9 @@ void heapify(vector<node_comp*> &V, int i, int length)
 	int smallest = i;
 	int left = 2 * i + 1;
 	int right = 2 * i + 2;
-	if (left <= length && V[left]->frequency < V[smallest]->frequency)
+	if (left <= length && V[left]->get_frequency() < V[smallest]->get_frequency())
 		smallest = left;
-	if (right<= length && V[right]->frequency < V[smallest]->frequency)
+	if (right<= length && V[right]->get_frequency() < V[smallest]->get_frequency())
 		smallest = right;
 	if (smallest != i)
 	{
@@ -138,7 +138,7 @@ void Insert_Heap(vector<node_comp*> &v, node_comp* e)
 	v.push_back(e);
 	int i = v.size() - 1;
 	int parent = (i - 1) / 2;
-	while (i > 0 && v[parent]->frequency > v[i]->frequency)
+	while (i > 0 && v[parent]->get_frequency() > v[i]->get_frequency())
 	{
 		swap(v[i], v[parent]);
 		i = parent;
